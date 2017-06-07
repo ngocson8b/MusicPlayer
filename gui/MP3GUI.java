@@ -1,0 +1,721 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gui;
+
+import method.VolumeChange;
+import method.Method;
+import java.io.File;
+import java.util.LinkedList;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JList;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+
+/**
+ *
+ * @author Dat Pham
+ */
+public class MP3GUI extends javax.swing.JFrame {
+    Method method = new Method();
+
+    VolumeChange volume = new VolumeChange();
+  
+    public static int autoPlay= 0;
+    
+    public LinkedList listMusic = null;
+    public LinkedList listMusic1;
+    public LinkedList listMusic2;
+  
+    int songId = -1;   
+    int mute = 0;
+    
+    public JList dsList;
+    /**
+     * Creates new form MP3GUI
+     */
+    public MP3GUI() {
+        initComponents();
+        //set icon
+        this.setIconImage(new ImageIcon(getClass().getResource("/icons/music.png")).getImage());
+        //set title
+        setTitle("Mp3 Music Player - BTL OOP"); 
+    }
+    
+    
+    
+    // open file
+     public void openFile() throws Exception{ 
+        
+        FileFilter filter = new FileNameExtensionFilter("MP3 Files", "mp3", "mpeg3");
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Open MP3 File");
+        chooser.addChoosableFileFilter(filter);
+        chooser.setMultiSelectionEnabled(true);
+        
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.CANCEL_OPTION){ // xu li ngoai le
+           throw new Exception("Not open file");
+        }
+        
+        listMusic2 = new LinkedList();
+        DefaultListModel model = new DefaultListModel();
+        File[] file = chooser.getSelectedFiles();
+        for(File f:file){
+            // luu vao list2 
+             model.addElement(f.getName());
+             listMusic2.add(f.toString());          
+        }         
+
+        dsList2.setModel(model);         
+    }
+    // open folder
+     public void openFolder() throws Exception{
+  
+         JFileChooser chooser = new JFileChooser();
+         int returnVal = chooser.showOpenDialog(null);
+         if(returnVal == JFileChooser.CANCEL_OPTION){ // xu li ngoai le
+             throw new Exception("Not open folder");
+         }
+        
+        String path = chooser.getCurrentDirectory().toString() + "/";
+        File folder = new File(path); 
+        listMusic1 = new LinkedList();
+  
+        File[] listOfFiles = folder.listFiles(); 
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            // luu vao list1
+            if (listOfFiles[i].isFile()&&listOfFiles[i].getName().endsWith("mp3")) {
+                listMusic1.add(listOfFiles[i].toString());
+                model.addElement(listOfFiles[i].getName());
+            }
+        }
+        dsList1.setModel(model);
+    }
+  
+    
+    public void next(){  
+        if (listMusic != null){
+            if (songId < listMusic.size()-1 ){
+                songId++;
+                dsList.setSelectedIndex(songId);
+                
+                //choi nhac
+                method.Stop();
+                String song = listMusic.get(songId).toString();      
+                method.Play(song);
+                
+                //in ra list 3
+                DefaultListModel model = new DefaultListModel();
+                model.addElement(dsList.getSelectedValue().toString());
+                dsList3.setModel(model);        
+                        
+            }
+        } 
+    }
+       
+    public void previous(){
+        if (listMusic != null){
+            if (songId > 0){
+                songId--;
+                dsList.setSelectedIndex(songId);
+                
+                // choi nhac
+                method.Stop();
+                String song = listMusic.get(songId).toString();      
+                method.Play(song);         
+                 
+                //in ra list 3
+                DefaultListModel model = new DefaultListModel();
+                model.addElement(dsList.getSelectedValue().toString());
+                dsList3.setModel(model); 
+            }
+        }
+        
+    }   
+    
+    public void autoPlay(){
+       if (listMusic != null){
+            //set
+            Method.isComplete = 1;
+            autoPlay = 1;
+            songId--;
+            
+            while ((autoPlay == 1)&&(Method.isComplete==1)){
+                next();
+                Method.isComplete = 0;
+            }    
+        }
+    }
+      
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        pPre = new javax.swing.JButton();
+        pStop = new javax.swing.JButton();
+        pPlay = new javax.swing.JButton();
+        listFile2 = new javax.swing.JButton();
+        pNext = new javax.swing.JButton();
+        slVolume = new javax.swing.JSlider();
+        listFile3 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dsList1 = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        dsList2 = new javax.swing.JList();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        dsList3 = new javax.swing.JList();
+        pAutoplay = new javax.swing.JButton();
+        pPre1 = new javax.swing.JButton();
+        pVolume = new javax.swing.JButton();
+        pNext2 = new javax.swing.JButton();
+        listFile1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mExit = new javax.swing.JMenuItem();
+        HelpMenu = new javax.swing.JMenu();
+        AboutItem = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        jPanel1.setOpaque(false);
+
+        pPre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Skip-backward-icon.png"))); // NOI18N
+        pPre.setToolTipText("Previous");
+        pPre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pPreActionPerformed(evt);
+            }
+        });
+
+        pStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Stop-icon.png"))); // NOI18N
+        pStop.setToolTipText("Stop");
+        pStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pStopActionPerformed(evt);
+            }
+        });
+
+        pPlay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Play-icon.png"))); // NOI18N
+        pPlay.setToolTipText("Play");
+        pPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pPlayActionPerformed(evt);
+            }
+        });
+
+        listFile2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/File-Music-icon.png"))); // NOI18N
+        listFile2.setText("Open file");
+        listFile2.setToolTipText("Pause");
+        listFile2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listFile2ActionPerformed(evt);
+            }
+        });
+
+        pNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Skip-forward-icon.png"))); // NOI18N
+        pNext.setToolTipText("Next");
+        pNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pNextActionPerformed(evt);
+            }
+        });
+
+        slVolume.setMajorTickSpacing(20);
+        slVolume.setPaintTicks(true);
+        slVolume.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                slVolumeStateChanged(evt);
+            }
+        });
+
+        listFile3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music-icon.png"))); // NOI18N
+        listFile3.setText("Now Playing");
+        listFile3.setToolTipText("Pause");
+        listFile3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                listFile3MouseReleased(evt);
+            }
+        });
+        listFile3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listFile3ActionPerformed(evt);
+            }
+        });
+
+        dsList1.setBackground(new java.awt.Color(232, 247, 239));
+        dsList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                dsList1MouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(dsList1);
+
+        dsList2.setBackground(new java.awt.Color(232, 247, 229));
+        dsList2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        dsList2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                dsList2MouseReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(dsList2);
+
+        dsList3.setBackground(new java.awt.Color(232, 247, 229));
+        jScrollPane3.setViewportView(dsList3);
+
+        pAutoplay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Clockwise-arrow-icon.png"))); // NOI18N
+        pAutoplay.setToolTipText("Auto Play ");
+        pAutoplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pAutoplayActionPerformed(evt);
+            }
+        });
+
+        pPre1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Fast-backward-icon.png"))); // NOI18N
+        pPre1.setToolTipText("First");
+        pPre1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pPre1ActionPerformed(evt);
+            }
+        });
+
+        pVolume.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Sound-on-icon.png"))); // NOI18N
+        pVolume.setToolTipText("On");
+        pVolume.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pVolumeActionPerformed(evt);
+            }
+        });
+
+        pNext2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Fast-forward-icon.png"))); // NOI18N
+        pNext2.setToolTipText("Last");
+        pNext2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pNext2ActionPerformed(evt);
+            }
+        });
+
+        listFile1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-flower-green-icon.png"))); // NOI18N
+        listFile1.setText("Open Folder");
+        listFile1.setToolTipText("Pause");
+        listFile1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listFile1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel2.setText("Click music to play");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pAutoplay, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pStop, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pPre1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(pPre, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pNext, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pNext2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(slVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(listFile1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 32, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(listFile2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(31, 31, 31)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(listFile3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel2)))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(listFile3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(listFile1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(listFile2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pAutoplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pPre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pNext, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pStop, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pPlay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(slVolume, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pPre1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pVolume, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pNext2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(44, 44, 44))
+        );
+
+        jMenu1.setText("File");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenu1MouseReleased(evt);
+            }
+        });
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
+
+        mExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
+        mExit.setText("Exit");
+        mExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mExitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mExit);
+
+        jMenuBar1.add(jMenu1);
+
+        HelpMenu.setText("Help");
+
+        AboutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
+        AboutItem.setText("About us");
+        AboutItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AboutItemActionPerformed(evt);
+            }
+        });
+        HelpMenu.add(AboutItem);
+
+        jMenuBar1.add(HelpMenu);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+   
+    
+    private void listFile3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listFile3MouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listFile3MouseReleased
+
+    private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_mExitActionPerformed
+
+    private void listFile2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listFile2ActionPerformed
+        // TODO add your handling code here:
+        // tao path cua file trong list2
+        try{
+            openFile();
+        } catch (Exception e) {
+                System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_listFile2ActionPerformed
+
+    private void dsList2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dsList2MouseReleased
+        // TODO add your handling code here:
+       
+       if (listMusic2 != null){
+           //set
+           listMusic = listMusic2;
+           dsList = dsList2;
+           songId = dsList.getSelectedIndex(); 
+           
+           //choi nhac
+           method.Stop();
+           String song = listMusic.get(songId).toString();
+           method.Play(song);
+           
+           // in ra list3
+           DefaultListModel model = new DefaultListModel();
+           model.addElement(dsList.getSelectedValue().toString());
+           dsList3.setModel(model);
+       }
+           
+    }//GEN-LAST:event_dsList2MouseReleased
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jMenu1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1MouseReleased
+
+    private void AboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutItemActionPerformed
+        // TODO add your handling code here:
+//        method.Play("button-1.mp3");
+        About us = new About();
+        
+        us.setVisible(true);
+        us.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        AboutItem.setEnabled(false);
+           
+        us.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    AboutItem.setEnabled(true);
+                }   
+            });
+        
+    }//GEN-LAST:event_AboutItemActionPerformed
+
+    private void pPreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pPreActionPerformed
+        // TODO add your handling code here:
+     
+        previous();
+    }//GEN-LAST:event_pPreActionPerformed
+
+    private void pAutoplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pAutoplayActionPerformed
+        // TODO add your handling code here:
+        autoPlay();
+        
+    }//GEN-LAST:event_pAutoplayActionPerformed
+
+    private void slVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_slVolumeStateChanged
+        // TODO add your handling code here:
+        if (listMusic != null){
+         
+           float value = slVolume.getValue()/100f;
+           System.out.println(value);
+           volume.stateChange(value);
+        }
+    }//GEN-LAST:event_slVolumeStateChanged
+
+    private void pPre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pPre1ActionPerformed
+        // TODO add your handling code here:
+        // play first
+        if (listMusic != null){
+            //set
+            songId = 0;
+            dsList.setSelectedIndex(songId);
+            
+            // choi nhac
+            method.Stop();
+            String song = listMusic.get(songId).toString();
+            method.Play(song);
+            
+            //in ra list 3
+            DefaultListModel model = new DefaultListModel();
+            model.addElement(dsList.getSelectedValue().toString());
+            dsList3.setModel(model); 
+        } 
+    }//GEN-LAST:event_pPre1ActionPerformed
+
+    private void pNext2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pNext2ActionPerformed
+        // TODO add your handling code here:
+        //play last
+        if (listMusic != null){
+            //set
+            songId = listMusic.size() - 1;
+            dsList.setSelectedIndex(songId);
+            
+            //choi nhac
+            method.Stop();
+            String song = listMusic.get(songId).toString();
+            method.Play(song);
+            
+            //in ra list 3
+            DefaultListModel model = new DefaultListModel();
+            model.addElement(dsList.getSelectedValue().toString());
+            dsList3.setModel(model); 
+        }
+    }//GEN-LAST:event_pNext2ActionPerformed
+
+    private void listFile1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listFile1ActionPerformed
+        // TODO add your handling code here:
+        // tao list 1 va path
+        try{
+        openFolder();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+       
+    }//GEN-LAST:event_listFile1ActionPerformed
+
+    private void pNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pNextActionPerformed
+        // TODO add your handling code here:
+        next();
+    }//GEN-LAST:event_pNextActionPerformed
+
+    private void pPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pPlayActionPerformed
+        // play file which is stoped
+        if (listMusic != null){
+            // choi nhac
+            method.Stop();
+            String song = listMusic.get(songId).toString();
+            method.Play(song);
+        }
+    }//GEN-LAST:event_pPlayActionPerformed
+
+    private void pStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pStopActionPerformed
+        // TODO add your handling code here:
+        method.Stop();
+            
+    }//GEN-LAST:event_pStopActionPerformed
+
+    private void dsList1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dsList1MouseReleased
+        // TODO add your handling code here:
+        if (listMusic1 != null){
+           //set
+           listMusic = listMusic1;
+           dsList = dsList1;
+           songId = dsList.getSelectedIndex();
+           
+           //choi nhac
+           method.Stop();          
+           String song = listMusic.get(songId).toString();
+           method.Play(song);
+           
+           // in ra list3
+           DefaultListModel model = new DefaultListModel();
+           model.addElement(dsList.getSelectedValue().toString());
+           dsList3.setModel(model);
+          
+       }
+    }//GEN-LAST:event_dsList1MouseReleased
+
+    private void pVolumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pVolumeActionPerformed
+        // TODO add your handling code here:
+        if (mute== 0){
+            mute = 1;
+            pVolume.setToolTipText("Off");
+            pVolume.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Sound-off-icon.png")));
+            volume.stateChange(0.0f);
+        } else 
+            if (mute == 1){  
+                mute = 0;
+                pVolume.setToolTipText("On");
+                pVolume.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Sound-on-icon.png")));
+                volume.stateChange(0.5f);
+            }
+    }//GEN-LAST:event_pVolumeActionPerformed
+
+    private void listFile3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listFile3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listFile3ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MP3GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MP3GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MP3GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MP3GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MP3GUI().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem AboutItem;
+    private javax.swing.JMenu HelpMenu;
+    private javax.swing.JList dsList1;
+    private javax.swing.JList dsList2;
+    private javax.swing.JList dsList3;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton listFile1;
+    private javax.swing.JButton listFile2;
+    private javax.swing.JButton listFile3;
+    private javax.swing.JMenuItem mExit;
+    private javax.swing.JButton pAutoplay;
+    private javax.swing.JButton pNext;
+    private javax.swing.JButton pNext2;
+    private javax.swing.JButton pPlay;
+    private javax.swing.JButton pPre;
+    private javax.swing.JButton pPre1;
+    private javax.swing.JButton pStop;
+    private javax.swing.JButton pVolume;
+    private javax.swing.JSlider slVolume;
+    // End of variables declaration//GEN-END:variables
+}
